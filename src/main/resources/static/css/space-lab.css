@@ -371,3 +371,12 @@ label output { margin-left: .6rem; color: var(--cyan-bright); font-family: var(-
   outline: 3px solid var(--cyan-bright);
   outline-offset: 2px;
 }
+
+/* Utilidades (reemplazo de estilos inline, CSP style-src 'self') */
+.os-text-left { text-align: left; }
+.os-text-cyan { color: var(--cyan-bright); }
+.os-text-orbit { color: var(--orbit-bright); }
+.os-form-inline { display: inline; }
+.os-mt-sm { margin-top: .6rem; }
+.os-mt { margin-top: 1.5rem; }
+.os-mt-none { margin-top: 0; }

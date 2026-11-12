@@ -12,7 +12,7 @@
 <body><a class="skip-link" href="#contenido">Saltar al contenido principal</a>
   <main class="content-wrap" id="contenido">
     <p class="eyebrow">ADMINISTRACIÓN · CLEARANCE</p>
-    <h1>Solicitudes<br><span style="color:var(--cyan-bright)">de acceso.</span></h1>
+    <h1>Solicitudes<br><span class="os-text-cyan">de acceso.</span></h1>
     <p><a class="text-link" th:href="@{/}">← Inicio</a></p>
     <div class="os-alert os-alert-ok" th:if="${param.rechazada}" role="status">Solicitud rechazada.</div>
     <div class="os-alert os-alert-error" th:if="${param.error}" role="alert">La solicitud ya no estaba pendiente o no existe.</div>
@@ -39,11 +39,11 @@
             </td>
             <td th:text="${s.fechaCreacion}"></td>
             <td>
-              <form method="post" th:action="@{/administracion/solicitudes/aprobar}" th:if="${s.estado == 'PENDIENTE'}" style="display:inline">
+              <form method="post" th:action="@{/administracion/solicitudes/aprobar}" th:if="${s.estado == 'PENDIENTE'}" class="os-form-inline">
                 <input type="hidden" name="solicitud" th:value="${s.id}">
                 <button type="submit">Aprobar →</button>
               </form>
-              <form method="post" th:action="@{/administracion/solicitudes/rechazar}" th:if="${s.estado == 'PENDIENTE'}" style="display:inline">
+              <form method="post" th:action="@{/administracion/solicitudes/rechazar}" th:if="${s.estado == 'PENDIENTE'}" class="os-form-inline">
                 <input type="hidden" name="solicitud" th:value="${s.id}">
                 <button type="submit" class="danger">Rechazar</button>
               </form>
@@ -52,7 +52,7 @@
           </tr>
         </tbody>
       </table>
-      <p class="os-note" style="margin-top:.6rem">Aprobar crea la cuenta con una contraseña temporal (mostrada una sola vez) y enrolla el rol solicitado. El Cadete/Tech Lead cambia su clave en Mi perfil.</p>
+      <p class="os-note os-mt-sm">Aprobar crea la cuenta con una contraseña temporal (mostrada una sola vez) y enrolla el rol solicitado. El Cadete/Tech Lead cambia su clave en Mi perfil.</p>
     </section>
   </main>
   <div id="os-terminal" class="os-terminal" role="status" aria-label="Barra de estado CHANGE">

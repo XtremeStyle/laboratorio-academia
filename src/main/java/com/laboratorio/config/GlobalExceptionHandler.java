@@ -55,9 +55,11 @@ public class GlobalExceptionHandler {
                 || req.getHeader("Accept") != null && req.getHeader("Accept").contains(MediaType.APPLICATION_JSON_VALUE);
         if (wantsJson) {
             res.setStatus(status);
+            // 5xx nunca filtra el detalle interno; 4xx muestra solo mensajes pensados para el cliente.
+            String detail = status < 500 ? (ex.getMessage() == null ? "Solicitud inválida" : ex.getMessage()) : "Error interno";
             try {
                 res.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
-                res.getWriter().write("{\"error\":{\"id\":\"" + errorId + "\",\"status\":" + status + ",\"message\":\"" + escape(ex.getMessage() == null ? "Error interno" : ex.getMessage()) + "\",\"path\":\"" + escape(path) + "\",\"timestamp\":\"" + Instant.now() + "\"}}");
+                res.getWriter().write("{\"error\":{\"id\":\"" + errorId + "\",\"status\":" + status + ",\"message\":\"" + escape(detail) + "\",\"path\":\"" + escape(path) + "\",\"timestamp\":\"" + Instant.now() + "\"}}");
             } catch (IOException ignored) { /* respuesta sin cuerpo si ya fue enviada */ }
             return new ModelAndView();
         }
