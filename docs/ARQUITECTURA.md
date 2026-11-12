@@ -11,7 +11,7 @@ presentation  com.laboratorio.*.*Controller (46)  → HTTP: mapea parámetros, v
                                                 Profesor · Administrador), Rol, EstadoUsuario,
                                                 SolicitudCuenta
   repository  com.laboratorio.repository           → contratos JDBC parametrizados (UsuarioRepository) + adaptadores
-  persistence Flyway V1..V9                        → DDL versionado; H2 de desarrollo y PostgreSQL de producción
+  persistence Flyway V1..V12                        → DDL versionado; H2 de desarrollo y PostgreSQL de producción
   security    config/SecurityConfiguration         → RBAC, CSP, formLogin, SessionAccountFilter (invalidación por cambio de cuenta)
 ```
 

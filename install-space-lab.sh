@@ -102,4 +102,4 @@ printf 'Puerto por defecto: %s\n\n' "$PORT_PREFERIDO"
 if [[ "$BOOT_INFO" == "1" ]]; then
   printf 'PRIMER ARRANQUE — cuenta de administrador local (de un solo uso):\n  correo:      admin@espacio-lab.local\n  contraseña:  %s\nCrea otro administrador y cambia/borra la contraseña temporal tras tu primer uso (Mi perfil > Cambiar contraseña).\n' "$GENERATED_PASS"
 fi
-printf '\nPara iniciar:      change-space-lab\nPara detener:      ./DETENER-LABORATORIO.sh\nPara desinstalar:  ./uninstall-space-lab.sh\n'
+printf '\nPara iniciar:      change-space-lab\nPara detener:      ./DETENER-LABORATORIO.sh\n'
