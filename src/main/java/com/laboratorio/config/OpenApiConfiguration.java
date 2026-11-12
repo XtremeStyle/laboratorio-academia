@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfiguration {
 
+    public static final String SCHEME_SESSION = "session";
+
     @Bean
     public OpenAPI changeOpenApi() {
         return new OpenAPI()
@@ -34,6 +36,11 @@ public class OpenApiConfiguration {
                         .version("0.1.0")
                         .contact(new Contact().name("CHANGE"))
                         .license(new License().name("Apache-2.0")))
-                .components(new Components());
+                .components(new Components().addSecuritySchemes(SCHEME_SESSION,
+                        new io.swagger.v3.oas.models.security.SecurityScheme()
+                                .type(io.swagger.v3.oas.models.security.SecurityScheme.Type.APIKEY)
+                                .in(io.swagger.v3.oas.models.security.SecurityScheme.In.COOKIE)
+                                .name("JSESSIONID")
+                                .description("Cookie de sesión obtenida tras POST /login")));
     }
 }
