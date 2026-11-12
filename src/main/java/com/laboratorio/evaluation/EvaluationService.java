@@ -39,7 +39,7 @@ public class EvaluationService {
         if(deliveries.isEmpty()) return deliveries;
         String placeholders=String.join(",",java.util.Collections.nCopies(deliveries.size(),"?"));
         var rows=db.query("SELECT d.id,c.id,c.descripcion,CASE WHEN EXISTS (SELECT 1 FROM criterio_competencia cc JOIN competencia_semillero cs ON cs.competencia_id=cc.competencia_id WHERE cc.criterio_id=c.id AND cs.semillero_id=am.semillero_destino_id) THEN TRUE ELSE FALSE END FROM entrega_etapa d JOIN asignacion_mision am ON am.id=d.asignacion_id JOIN criterio_evaluacion c ON c.mision_id=d.mision_id AND (c.etapa_id IS NULL OR c.etapa_id=d.etapa_id) WHERE d.id IN ("+placeholders+") ORDER BY c.orden,c.id",
-            (rs,i)->new CriterionRow(rs.getObject(1,UUID.class),new Criterion(rs.getObject(2,UUID.class),rs.getString(3),rs.getBoolean(4))),deliveries.stream().map(Delivery::id).toArray());
+            (rs,i)->new CriterionRow(rs.getObject(1,UUID.class),new Criterion(rs.getObject(2,UUID.class), rs.getString(3), rs.getBoolean(4), BigDecimal.ZERO)),deliveries.stream().map(Delivery::id).toArray());
         var byDelivery=rows.stream().collect(java.util.stream.Collectors.groupingBy(CriterionRow::delivery,java.util.stream.Collectors.mapping(CriterionRow::criterion,java.util.stream.Collectors.toList())));
         var participants=db.query("""
             SELECT d.id,u.id,u.nombre,u.apellido,ai.ajuste,ai.justificacion FROM entrega_etapa d
@@ -67,8 +67,9 @@ public class EvaluationService {
           OR EXISTS (SELECT 1 FROM asignacion_semillero x JOIN asignacion_activa xa ON xa.asignacion_id=x.id WHERE x.usuario_id=? AND x.semillero_id=ms.semillero_id))
           """,Integer.class,delivery,teacher,teacher);
         if(permitted==null || permitted==0) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        var criteria=db.query("SELECT c.id,CASE WHEN EXISTS (SELECT 1 FROM criterio_competencia cc JOIN competencia_semillero cs ON cs.competencia_id=cc.competencia_id WHERE cc.criterio_id=c.id AND cs.semillero_id=am.semillero_destino_id) THEN TRUE ELSE FALSE END FROM entrega_etapa d JOIN asignacion_mision am ON am.id=d.asignacion_id JOIN criterio_evaluacion c ON c.mision_id=d.mision_id AND (c.etapa_id IS NULL OR c.etapa_id=d.etapa_id) WHERE d.id=?",(rs,i)->new Criterion(rs.getObject(1,UUID.class),"",rs.getBoolean(2)),delivery);
+        var criteria=db.query("SELECT c.id, c.descripcion, COALESCE(c.peso,0),CASE WHEN EXISTS (SELECT 1 FROM criterio_competencia cc JOIN competencia_semillero cs ON cs.competencia_id=cc.competencia_id WHERE cc.criterio_id=c.id AND cs.semillero_id=am.semillero_destino_id) THEN TRUE ELSE FALSE END FROM entrega_etapa d JOIN asignacion_mision am ON am.id=d.asignacion_id JOIN criterio_evaluacion c ON c.mision_id=d.mision_id AND (c.etapa_id IS NULL OR c.etapa_id=d.etapa_id) WHERE d.id=?",(rs,i)->new Criterion(rs.getObject(1,UUID.class), rs.getString(2), rs.getBoolean(4), rs.getBigDecimal(3)),delivery);
         java.util.Map<UUID,BigDecimal> scores=new java.util.HashMap<>();
+        BigDecimal weightedSum = BigDecimal.ZERO, weightSum = BigDecimal.ZERO;
         for(Criterion criterion:criteria) {
             String value=parameters.getOrDefault("criterio_"+criterion.id(),"").strip();
             if(value.isEmpty()) { if(criterion.required()) throw new IllegalArgumentException("Califica cada criterio vinculado a una competencia."); continue; }
@@ -76,7 +77,13 @@ public class EvaluationService {
             try { criterionScore=new BigDecimal(value); } catch(NumberFormatException ex) { throw new IllegalArgumentException("La nota de cada criterio debe ser numérica."); }
             if(criterionScore.signum()<0 || criterionScore.compareTo(new BigDecimal("5"))>0 || criterionScore.scale()>4) throw new IllegalArgumentException("Las notas de los criterios deben estar entre 0 y 5, con hasta cuatro decimales.");
             scores.put(criterion.id(),criterionScore);
+            if (criterion.peso().compareTo(BigDecimal.ZERO) > 0) {
+                weightedSum = weightedSum.add(criterionScore.multiply(criterion.peso()));
+                weightSum = weightSum.add(criterion.peso());
+            }
         }
+        BigDecimal weightedScore = weightSum.compareTo(BigDecimal.ZERO) > 0 ? weightedSum.divide(weightSum, 4, java.math.RoundingMode.HALF_UP) : null;
+        if (weightedScore != null) score = weightedScore;
         var versions=db.query("SELECT id FROM version_entrega WHERE entrega_etapa_id=? ORDER BY numero DESC LIMIT 1",(rs,i)->rs.getObject(1,UUID.class),delivery);
         if(versions.isEmpty()) throw new IllegalArgumentException("No hay una entrega que evaluar.");
         var evaluations=db.query("SELECT id FROM evaluacion WHERE entrega_etapa_id=?",(rs,i)->rs.getObject(1,UUID.class),delivery);
@@ -113,6 +120,6 @@ public class EvaluationService {
     private record MemberRow(UUID delivery,Member member) {}
     private record Adjustment(UUID user,BigDecimal delta,String reason) {}
     public record Member(UUID id,String name,BigDecimal delta,String reason) {}
-    public record Criterion(UUID id,String description,boolean required) {}
+    public record Criterion(UUID id,String description,boolean required,java.math.BigDecimal peso) {}
     public record Delivery(UUID id,String title,int version,String content,String recipient,java.time.OffsetDateTime submitted,String stage,UUID attachment,String attachmentName,List<Criterion> criteria,List<Member> members) {}
 }

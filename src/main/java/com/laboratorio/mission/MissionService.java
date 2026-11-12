@@ -74,7 +74,8 @@ public class MissionService {
         audit.record(a.id(),"CREAR_MISION","MISION",mission);
     }
     @Transactional
-    public void addStage(String email, UUID mission, String title, String due, boolean required, String criterion) {
+    public void addStage(String email, UUID mission, String title, String due, boolean required, String criterion, java.math.BigDecimal peso) {
+        if(peso != null && peso.signum() < 0) throw new IllegalArgumentException("El peso no puede ser negativo.");
         Actor a=actor(email);
         var rows=db.query("SELECT ms.semillero_id FROM mision m JOIN mision_semillero ms ON ms.mision_id=m.id WHERE m.id=? AND m.academia_id=? AND m.estado='PUBLICADA' FOR UPDATE",(rs,i)->rs.getObject(1,UUID.class),mission,a.academy());
         if(rows.isEmpty() || rows.stream().anyMatch(t->!authorized(a,t))) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -93,7 +94,8 @@ public class MissionService {
         db.update("UPDATE etapa_mision SET orden=? WHERE id=?",order+1,finalStage.get("id"));
         UUID stage=UUID.randomUUID();
         db.update("INSERT INTO etapa_mision(id,mision_id,titulo,orden,obligatoria,es_final,vencimiento) VALUES (?,?,?,?,?,FALSE,?)",stage,mission,title,order,required,deadline);
-        db.update("INSERT INTO criterio_evaluacion(id,mision_id,etapa_id,nombre,descripcion,orden) VALUES (?,?,?,'Criterio principal',?,1)",UUID.randomUUID(),mission,stage,criterion);
+        peso=peso==null ? java.math.BigDecimal.ZERO : peso;
+        db.update("INSERT INTO criterio_evaluacion(id,mision_id,etapa_id,nombre,descripcion,orden,peso) VALUES (?,?,?,'Criterio principal',?,1,?)",UUID.randomUUID(),mission,stage,criterion,peso);
         audit.record(a.id(),"CREAR_ETAPA","ETAPA",stage);
     }
     @Transactional

@@ -24,8 +24,15 @@ public class MissionController {
     }
     @PostMapping("/academia/misiones/etapas")
     public String stage(Principal p,Model m,@RequestParam UUID mision,@RequestParam(defaultValue="") String titulo,
-            @RequestParam(defaultValue="") String fecha,@RequestParam(defaultValue="false") boolean obligatoria,@RequestParam(defaultValue="") String criterio) {
-        try { service.addStage(p.getName(),mision,titulo,fecha,obligatoria,criterio); return "redirect:/academia/misiones?etapa"; }
+            @RequestParam(defaultValue="") String fecha,@RequestParam(defaultValue="false") boolean obligatoria,@RequestParam(defaultValue="") String criterio,
+            @RequestParam(required=false) String peso) {
+        java.math.BigDecimal pesoNorm = null;
+        if (peso != null && !peso.strip().isEmpty()) {
+            try { pesoNorm = new java.math.BigDecimal(peso.replace(',', '.').strip()); }
+            catch (NumberFormatException ex) { m.addAttribute("error", "Indica un peso numérico no negativo (ej. 1, 2, 3)."); return index(p, m); }
+            if (pesoNorm.signum() < 0) { m.addAttribute("error", "El peso no puede ser negativo."); return index(p, m); }
+        }
+        try { service.addStage(p.getName(),mision,titulo,fecha,obligatoria,criterio,pesoNorm); return "redirect:/academia/misiones?etapa"; }
         catch(IllegalArgumentException ex) { m.addAttribute("error",ex.getMessage()); return index(p,m); }
     }
     @PostMapping("/academia/misiones/asignar")
