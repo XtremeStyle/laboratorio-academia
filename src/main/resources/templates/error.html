@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#04070f">
+  <title>Error · CHANGE // SPACE-LAB OS</title>
+  <link rel="stylesheet" th:href="@{/css/laboratorio.css}">
+  <link rel="stylesheet" th:href="@{/css/space-lab.css}">
+  <link rel="icon" th:href="@{/assets/brand/change-orbit.svg}" type="image/svg+xml">
+</head>
+<body>
+  <main class="content-wrap" id="contenido">
+    <p class="eyebrow">SISTEMA · ALERTA ORBITAL</p>
+    <h1>Algo no salió bien <span style="color:var(--orbit-bright)">esta órbita.</span></h1>
+    <p>Revisa la dirección o tu sesión; si ya iniciaste, vuelve al panel o reintenta.</p>
+    <section class="panel">
+      <p class="os-note" th:if="${errorId}">Código de incidencia: <code th:text="${errorId}"></code></p>
+      <ul>
+        <li><a th:href="@{/}">Volver al inicio</a></li>
+        <li><a th:href="@{/mis-misiones}">Mis Misiones</a></li>
+        <li><a th:href="@{/cursos}">Cursos</a></li>
+        <li><a th:href="@{/login}">Volver a iniciar sesión</a></li>
+      </ul>
+    </section>
+  </main>
+  <div id="os-terminal" class="os-terminal" role="status" aria-label="Barra de estado CHANGE"><span class="os-dot"></span><span class="os-label">CHANGE·OS</span><span class="os-log"><b>ERR //</b> desconocido — revisar enlace</span><span class="os-right">INCIDENCIA</span></div>
+  <script th:src="@{/js/os-terminal.js}" defer></script>
+</body>
+</html>

@@ -30,6 +30,9 @@ Plataforma académica en construcción para gestionar semilleros, Tripulaciones,
 
 PostgreSQL 18 está instalado en este equipo y el servicio local (`systemd --user`) lo arranca automáticamente. La base `change_space_lab` contiene los datos reales migrados desde H2 (sin cuentas de ejemplo ni semilleros ficticios). Para arrancar la app contra PG: `./INICIAR-CON-POSTGRES.sh`. Para volver a H2: `./run-laboratorio.sh` (dato deprecated para desarrollo activo).
 
+## Requisitos
+Java 21, `git`, `curl`, `tar`. Ver `docs/MIGRACION-POSTGRESQL.md` y `SECURITY.md` para detalles.
+
 ## Ejecutar en Linux (recomendado)
 
 1. Extrae el ZIP en una carpeta de tu elección.

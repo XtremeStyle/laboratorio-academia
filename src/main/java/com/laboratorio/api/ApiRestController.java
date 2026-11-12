@@ -1,6 +1,10 @@
 package com.laboratorio.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,7 +56,13 @@ public class ApiRestController {
         this.xp = xp;
     }
 
-    @Operation(summary = "Perfil del solicitante")
+    @Operation(summary = "Perfil del solicitante", description = "Devuelve el correo, nombre completo y roles del usuario autenticado.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Perfil obtenido",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = java.util.Map.class))),
+        @ApiResponse(responseCode = "302", description = "Redirigido a /login si no hay sesión")
+    })
     @GetMapping("/perfil")
     public Map<String, Object> perfil(Principal principal) {
         var roles = roles(principal.getName());
@@ -63,7 +73,13 @@ public class ApiRestController {
         return out;
     }
 
-    @Operation(summary = "Catálogo de Cursos visible al solicitante (estudiante o consulta docente)")
+    @Operation(summary = "Catálogo de Cursos visible", description = "Devuelve el catálogo para estudiantes (inscripción activa) y los cursos de consulta académica (docentes/admins).")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Catálogo devuelto correctamente",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = java.util.Map.class))),
+        @ApiResponse(responseCode = "302", description = "Redirigido a /login si no hay sesión")
+    })
     @GetMapping("/cursos")
     public Map<String, Object> cursos(Principal principal) {
         var vista = courses.catalogFor(principal.getName());
@@ -73,7 +89,13 @@ public class ApiRestController {
                 "consultaAcademica", vista.staffCourses());
     }
 
-    @Operation(summary = "Detalle de una matrícula del solicitante")
+    @Operation(summary = "Detalle de una matrícula", description = "Devuelve la matrícula y el estado de sus lecciones si el solicitante es estudiante en ella.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Detalle devuelto"),
+        @ApiResponse(responseCode = "403", description = "La matrícula no pertenece al solicitante o el rol no está autorizado"),
+        @ApiResponse(responseCode = "404", description = "Matrícula inexistente"),
+        @ApiResponse(responseCode = "302", description = "Redirigido a /login si no hay sesión")
+    })
     @GetMapping("/cursos/{enrollmentId}")
     public Map<String, Object> detalle(@PathVariable UUID enrollmentId, Authentication auth) {
         boolean visible = auth.getAuthorities().stream()
@@ -84,7 +106,10 @@ public class ApiRestController {
         return Map.of("course", detalle.course(), "lessons", detalle.lessons());
     }
 
-    @Operation(summary = "Misiones asignadas al solicitante con promedio vigente")
+    @Operation(summary = "Misiones asignadas", description = "Lista las Misiones del solicitante con promedio vigente y estado actual.")
+    @ApiResponse(responseCode = "200", description = "Lista de Misiones",
+        content = @Content(mediaType = "application/json",
+            schema = @Schema(implementation = java.util.List.class)))
     @GetMapping("/misiones")
     public List<Map<String, Object>> misiones(Principal principal) {
         return missions.mineForReport(principal.getName()).stream()
@@ -98,7 +123,10 @@ public class ApiRestController {
                 .toList();
     }
 
-    @Operation(summary = "Notificaciones internas no leídas y recientes del solicitante")
+    @Operation(summary = "Notificaciones", description = "Devuelve las últimas 50 notificaciones del solicitante, con su estado de lectura.")
+    @ApiResponse(responseCode = "200", description = "Notificaciones devueltas",
+        content = @Content(mediaType = "application/json",
+            schema = @Schema(implementation = java.util.List.class)))
     @GetMapping("/notificaciones")
     public List<Map<String, Object>> notificaciones(Principal principal) {
         return notifications.list(principal.getName()).stream()
@@ -111,7 +139,10 @@ public class ApiRestController {
                 .toList();
     }
 
-    @Operation(summary = "Progreso por competencias del solicitante")
+    @Operation(summary = "Progreso por competencias", description = "Promedio de las notas de los criterios vinculados a competencias por semillero.")
+    @ApiResponse(responseCode = "200", description = "Progreso devuelto",
+        content = @Content(mediaType = "application/json",
+            schema = @Schema(implementation = java.util.List.class)))
     @GetMapping("/progreso")
     public List<Map<String, Object>> progreso(Principal principal) {
         return progress.mine(principal.getName()).stream()
@@ -123,7 +154,10 @@ public class ApiRestController {
                 .toList();
     }
 
-    @Operation(summary = "Experiencia y rango del solicitante")
+    @Operation(summary = "Experiencia y rango", description = "Devuelve XP total, rango, número de Misiones y los últimos 10 movimientos del libro de XP.")
+    @ApiResponse(responseCode = "200", description = "XP devuelto",
+        content = @Content(mediaType = "application/json",
+            schema = @Schema(implementation = java.util.Map.class)))
     @GetMapping("/xp")
     public Map<String, Object> xpPersonal(Principal principal) {
         var personal = ranking.personal(principal.getName());

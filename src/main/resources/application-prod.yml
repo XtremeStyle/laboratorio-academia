@@ -38,3 +38,10 @@ logging:
   level:
     root: INFO
     com.laboratorio: INFO
+
+# Swagger/OpenAPI desactivado en producción (activar solo para debugging controlado)
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
