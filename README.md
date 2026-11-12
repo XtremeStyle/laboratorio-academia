@@ -28,11 +28,6 @@ Plataforma académica en construcción para gestionar semilleros, Tripulaciones,
 - Conexión a internet en la primera ejecución para descargar Apache Maven y las dependencias Java.
 - `curl` y `tar` para el lanzador Linux (el lanzador intenta instalarlos si faltan y detecta Arch Linux o Debian/Ubuntu).
 
-PostgreSQL 18 está instalado en este equipo y el servicio local (`systemd --user`) lo arranca automáticamente. La base `change_space_lab` contiene los datos reales migrados desde H2 (sin cuentas de ejemplo ni semilleros ficticios). Para arrancar la app contra PG: `./INICIAR-CON-POSTGRES.sh`. Para volver a H2: `./run-laboratorio.sh` (dato deprecated para desarrollo activo).
-
-## Requisitos
-Java 21, `git`, `curl`, `tar`. Ver `docs/MIGRACION-POSTGRESQL.md` y `SECURITY.md` para detalles.
-
 ## Ejecutar en Linux (recomendado)
 
 1. Extrae el ZIP en una carpeta de tu elección.
@@ -119,11 +114,11 @@ La estructura modular de dominio se incorporará a medida que se aprueben los mo
 
 - `/laboratorio/circuitos`: laboratorio de Robótica y Electrónica. Modelo DC ideal de un circuito en serie con batería, resistencia, interruptor y LED; calcula corriente y potencia y advierte al exceder límites declarados. No sustituye mediciones ni prácticas supervisadas con componentes reales.
 - `/laboratorio/astronomia`: laboratorio de Astronomía. Problema de dos cuerpos con órbita kepleriana; calcula periodo (tercera ley de Kepler en forma normalizada), perihelio, afelio y velocidades (vis-viva en unidades normalizadas), con presets y controles accesibles. Aproximación educativa: no apta para navegación real.
-- `/cursos`: CHANGE Academy. Rutas formativas persistidas (Robótica y Cosmos, seis lecciones cada una) con inscripción por semillero activo y registro de evidencia por lección. Las rutas tienen **ocho lecciones** y se vinculan automáticamente a semilleros activos con código `ROBOTICA`, `ASTRONOMIA` o `COSMOS`.
+- `/cursos`: CHANGE Academy. Rutas formativas persistidas (Robótica y Astronomía, ocho lecciones cada una) con inscripción por semillero activo y registro de evidencia por lección. Se vinculan automáticamente a semilleros activos con código `ROBOTICA`, `ASTRONOMIA` o `COSMOS`.
 
 Los laboratorios son simulaciones educativas y no instrumentos de medición reales. Pruebas de modelos: `node scripts/test-circuitos.cjs`, `node scripts/test-astronomia.cjs`, `node scripts/test-red-circuitos.cjs`, `node scripts/test-estaciones.cjs`, `node scripts/test-evidencia-diseno.cjs` y `node scripts/test-lanzamiento.cjs` (incluye Δv de Tsiolkovsky y relación empuje/peso).
 
-Esta primera versión de cursos no sustituye el sistema de Misiones: la conversión de actividades en Misiones evaluables, rúbricas docentes, XP/insignias por curso y certificaciones sigue en desarrollo. La migración V6 añade tablas sin modificar las anteriores. La validación disponible se realizó con H2; PostgreSQL real y la revisión integral de seguridad deben ejecutarse antes de considerar la plataforma apta para producción.
+Esta primera versión de cursos no sustituye el sistema de Misiones: la conversión de actividades en Misiones evaluables, rúbricas docentes, XP/insignias por curso y certificaciones sigue en desarrollo. Las migraciones Flyway V1–V12 se aplican tanto sobre H2 como sobre PostgreSQL 18 (principal). PostgreSQL real y la revisión integral de seguridad ya se ejecutaron en el equipo de desarrollo; para producción sigue vigente la nota de seguridad de `SECURITY.md`.
 
 ## Seguridad de la aplicación web
 
