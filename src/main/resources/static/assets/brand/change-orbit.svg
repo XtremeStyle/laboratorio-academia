@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none" role="img" aria-labelledby="title">
+  <title id="title">CHANGE orbital emblem</title>
+  <defs>
+    <linearGradient id="core" x1="18" y1="18" x2="77" y2="78" gradientUnits="userSpaceOnUse"><stop stop-color="#65D5EA"/><stop offset=".55" stop-color="#6B91D8"/><stop offset="1" stop-color="#9275E8"/></linearGradient>
+    <linearGradient id="orbit" x1="8" y1="24" x2="88" y2="70" gradientUnits="userSpaceOnUse"><stop stop-color="#54C8E8"/><stop offset=".58" stop-color="#7396E8"/><stop offset="1" stop-color="#A58BEF"/></linearGradient>
+  </defs>
+  <path d="M66.5 24.5A31 31 0 1 0 71 64.2" stroke="url(#core)" stroke-width="10" stroke-linecap="round"/>
+  <ellipse cx="48" cy="48" rx="42" ry="14.5" transform="rotate(-27 48 48)" stroke="url(#orbit)" stroke-width="3.2"/>
+  <circle cx="76.5" cy="31" r="5.2" fill="#A58BEF"/>
+  <circle cx="26" cy="68" r="2.3" fill="#54C8E8"/>
+</svg>

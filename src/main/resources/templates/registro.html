@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#04070f">
+  <meta name="description" content="Solicita tu acceso al entorno CHANGE // SPACE-LAB OS.">
+  <title>Solicitar acceso · CHANGE // SPACE-LAB OS</title>
+  <link rel="stylesheet" th:href="@{/css/laboratorio.css}">
+  <link rel="stylesheet" th:href="@{/css/space-lab.css}">
+  <link rel="icon" th:href="@{/assets/brand/change-orbit.svg}" type="image/svg+xml">
+</head>
+<body class="os-auth-body"><a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+  <main class="os-auth-grid" id="contenido">
+    <aside class="os-hero" aria-hidden="true">
+      <div class="os-hero-top">
+        <span class="os-chip chip-cyan">FIRMA · LOCAL</span>
+        <span class="os-chip">SIN CORREO</span>
+      </div>
+      <div class="os-orbit">
+        <div class="os-ring os-ring-1"></div>
+        <div class="os-ring os-ring-2"></div>
+        <div class="os-ring os-ring-3"></div>
+        <div class="os-core"><img th:src="@{/assets/brand/change-orbit.svg}" alt="Emblema orbital de CHANGE"></div>
+        <div class="os-satellite"></div>
+      </div>
+      <div class="os-hero-bottom">
+        <p class="os-hero-kicker">SOLICITAR CLEARANCE</p>
+        <h1 class="os-hero-title">Tu asiento<br><span>en la misión.</span></h1>
+        <p class="os-hero-sub">Déjanos tus datos. El equipo académico de tu academia revisará tu solicitud y te entregará las credenciales por un canal privado.</p>
+      </div>
+    </aside>
+    <section class="auth-card os-auth-card" aria-labelledby="registro-title">
+      <p class="auth-eyebrow">ALTA DE PERSONAL</p>
+      <h2 id="registro-title" class="os-h2">Solicitar<br><span>acceso.</span></h2>
+
+      <div class="os-alert os-alert-ok" th:if="${enviada}" role="status">
+        <b>Transmisión recibida.</b> Si el equipo académico aprueba tu solicitud, el administrador de la academia te entregará las credenciales por un canal privado.<br>
+        <span th:if="${sinAcademia}"> (No hay academia activa en este entorno; pide al equipo local que habilite una infraestructura de demostración.)</span>
+      </div>
+
+      <div class="os-alert os-alert-error" th:if="${error}" role="alert"><b>Revisa el formulario.</b> <span th:text="${error}"></span></div>
+
+      <form class="auth-form" method="post" th:action="@{/registro}" th:unless="${enviada}">
+        <div class="os-form-grid">
+          <div>
+            <label for="nombre">Nombre</label>
+            <input id="nombre" name="nombre" type="text" autocomplete="given-name" maxlength="120" required th:value="${nombre}">
+          </div>
+          <div>
+            <label for="apellido">Apellido</label>
+            <input id="apellido" name="apellido" type="text" autocomplete="family-name" maxlength="120" required th:value="${apellido}">
+          </div>
+        </div>
+        <label for="correo">Correo</label>
+        <input id="correo" name="correo" type="email" autocomplete="email" maxlength="254" required th:value="${correo}" placeholder="nombre@ejemplo.com">
+        <label for="rol">Interés en la misión</label>
+        <select id="rol" name="rol" required>
+          <option value="ESTUDIANTE" th:selected="${rol == null || rol == 'ESTUDIANTE'}">Estudiante · Cadete de misión</option>
+          <option value="PROFESOR" th:selected="${rol == 'PROFESOR'}">Profesor · Tech Lead académico</option>
+        </select>
+        <label for="mensaje">Mensaje para el equipo (opcional)</label>
+        <textarea id="mensaje" name="mensaje" maxlength="500" placeholder="Tu motivación, experiencia o semillero de preferencia…"></textarea>
+        <button class="auth-submit" type="submit">Enviar solicitud <span aria-hidden="true">→</span></button>
+      </form>
+      <a class="auth-back" th:href="@{/login}">← Ya tengo cuenta, iniciar sesión</a>
+      <p class="os-footnote">Sin correo ni SMS · las altas las aprueba un administrador local</p>
+    </section>
+  </main>
+  <div id="os-terminal" class="os-terminal" role="status" aria-label="Barra de estado CHANGE">
+    <span class="os-dot"></span>
+    <span class="os-label">CHANGE·OS</span>
+    <span class="os-log"><b>SOL //</b> solicitud en espera de clearance</span>
+    <span class="os-right">PRIVADO · LOCAL</span>
+  </div>
+  <script th:src="@{/js/os-terminal.js}" defer></script>
+</body>
+</html>

@@ -3,6 +3,7 @@ target/
 *.class
 *.jar
 *.war
+.mvn/wrapper/dists/
 .mvn/wrapper/maven-wrapper.jar
 
 # IDE
@@ -23,3 +24,10 @@ Thumbs.db
 !.env.example
 application-local.yml
 application-local.properties
+
+# Logs
+*.log
+logs/
+
+# Base H2 local de desarrollo (contiene datos)
+data/

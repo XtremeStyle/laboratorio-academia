@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CHANGE Academy · Cursos</title>
+  <link rel="stylesheet" th:href="@{/css/laboratorio.css}"><link rel="stylesheet" th:href="@{/css/change-brand.css}"><link rel="stylesheet" th:href="@{/css/cursos.css}">
+  <link rel="stylesheet" th:href="@{/css/space-lab.css}">
+</head>
+<body><a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+<main class="content-wrap academy-page" id="contenido">
+  <p class="eyebrow">CHANGE ACADEMY <span class="lab-dot"></span> APRENDIZAJE POR PROYECTOS</p>
+  <h1>Aprende. <span>Construye.</span> Descubre.</h1>
+  <p class="academy-lead">Rutas formativas conectadas con tus semilleros. Inscríbete, desarrolla cada práctica y registra la evidencia de tu aprendizaje.</p>
+  <nav class="lab-switch" aria-label="Navegación académica"><a th:href="@{/}">← Inicio</a><a th:href="@{/laboratorio/circuitos}">⌁ Laboratorio de robótica</a><a th:href="@{/laboratorio/astronomia}">◉ Laboratorio Cosmos</a></nav>
+  <p class="academy-notice" th:if="${param.matriculado}">Tu matrícula está registrada. Ya puedes continuar la ruta.</p>
+  <p class="academy-notice" th:if="${!esEstudiante}">Vista de solo lectura: las matrículas y el registro de progreso se realizan desde la cuenta de cada estudiante.</p>
+  <section class="academy-grid" aria-label="Catálogo de cursos">
+    <article class="academy-card" th:each="curso : ${cursos}">
+      <div class="academy-card-top"><span class="academy-kicker" th:text="${curso.track}">Semillero</span><span class="academy-level" th:text="${curso.level}">INICIAL</span></div>
+      <h2 th:text="${curso.title}">Curso</h2><p th:text="${curso.description}">Descripción</p>
+      <div class="academy-meta"><span th:text="|${curso.lessons} lecciones|">6 lecciones</span><span th:text="|${curso.minutes} min|">480 min</span></div>
+      <div class="academy-progress" th:if="${esEstudiante and curso.enrollment != null}"><progress class="academy-progress-meter" th:max="${curso.lessons}" th:value="${curso.completed}">Progreso</progress><small th:text="|${curso.completed} de ${curso.lessons} lecciones completadas|">Progreso</small></div>
+      <a class="academy-action" th:if="${esEstudiante and curso.enrollment != null}" th:href="@{/cursos/estudiar(matricula=${curso.enrollment})}">Continuar curso <span>↗</span></a>
+      <form th:if="${esEstudiante and curso.enrollment == null}" th:action="@{/cursos/matricular}" method="post"><input type="hidden" name="curso" th:value="${curso.id}"><input type="hidden" name="semillero" th:value="${curso.trackId}"><button class="academy-action" type="submit">Inscribirme <span>↗</span></button></form>
+      <a class="academy-action" th:if="${!esEstudiante}" th:href="@{/academia/cursos/progreso(curso=${curso.id},semillero=${curso.trackId})}">Consultar progreso ↗</a>
+    </article>
+    <p class="academy-empty" th:if="${#lists.isEmpty(cursos)}" th:text="${esEstudiante} ? 'Aún no hay rutas asociadas a tus semilleros activos. Solicita al equipo académico que revise tu asignación.' : 'Aún no hay rutas publicadas en los semilleros que puedes consultar.'">Aún no hay rutas asociadas a tus semilleros activos. Solicita al equipo académico que revise tu asignación.</p>
+  </section>
+  <section th:if="${!#lists.isEmpty(cursosDocente)}" aria-label="Cursos para consulta académica">
+    <h2>Cursos para consulta académica</h2>
+    <p class="academy-notice">Consulta por tu rol docente o administrativo. La inscripción se realiza desde tus cursos como estudiante.</p>
+    <div class="academy-grid">
+      <article class="academy-card" th:each="curso : ${cursosDocente}">
+        <div class="academy-card-top"><span class="academy-kicker" th:text="${curso.track}">Semillero</span><span class="academy-level" th:text="${curso.level}">Nivel</span></div>
+        <h3 th:text="${curso.title}">Curso</h3><p th:text="${curso.description}">Descripción</p>
+        <div class="academy-meta"><span th:text="|${curso.lessons} lecciones|">Lecciones</span><span th:text="|${curso.minutes} min|">Duración</span></div>
+        <a class="academy-action" th:href="@{/academia/cursos/progreso(curso=${curso.id},semillero=${curso.trackId})}">Consultar progreso ↗</a>
+      </article>
+    </div>
+  </section>
+</main>
+  <div id="os-terminal" class="os-terminal" role="status" aria-label="Barra de estado CHANGE"><span class="os-dot"></span><span class="os-label">CHANGE·OS</span><span class="os-log"><b>NAV //</b> sesión autenticada</span><span class="os-right">SECURE · LOCAL</span></div>
+  <script th:src="@{/js/os-terminal.js}" defer></script>
+</body></html>

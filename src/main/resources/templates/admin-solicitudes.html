@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#04070f">
+  <title>Solicitudes de acceso · CHANGE // SPACE-LAB OS</title>
+  <link rel="stylesheet" th:href="@{/css/laboratorio.css}">
+  <link rel="stylesheet" th:href="@{/css/space-lab.css}">
+  <link rel="icon" th:href="@{/assets/brand/change-orbit.svg}" type="image/svg+xml">
+</head>
+<body><a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+  <main class="content-wrap" id="contenido">
+    <p class="eyebrow">ADMINISTRACIÓN · CLEARANCE</p>
+    <h1>Solicitudes<br><span style="color:var(--cyan-bright)">de acceso.</span></h1>
+    <p><a class="text-link" th:href="@{/}">← Inicio</a></p>
+    <div class="os-alert os-alert-ok" th:if="${param.rechazada}" role="status">Solicitud rechazada.</div>
+    <div class="os-alert os-alert-error" th:if="${param.error}" role="alert">La solicitud ya no estaba pendiente o no existe.</div>
+    <div class="os-alert os-alert-error" th:if="${error}" role="alert"><span th:text="${error}"></span></div>
+
+    <section class="panel" th:if="${#lists.isEmpty(solicitudes)}">
+      <p class="os-note">No hay solicitudes registradas todavía.</p>
+    </section>
+
+    <section class="os-table-wrap" th:unless="${#lists.isEmpty(solicitudes)}">
+      <table>
+        <thead>
+          <tr><th>Correo</th><th>Nombre</th><th>Rol solicitado</th><th>Mensaje</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="s : ${solicitudes}">
+            <td th:text="${s.correo}"></td>
+            <td th:text="${s.nombre + ' ' + s.apellido}"></td>
+            <td><span class="chip chip-cyan" th:text="${s.rol}"></span></td>
+            <td th:text="${s.mensaje != null ? s.mensaje : '—'}"></td>
+            <td>
+              <span class="badge badge-ok" th:if="${s.estado == 'PENDIENTE'}">Pendiente</span>
+              <span class="badge" th:if="${s.estado != 'PENDIENTE'}" th:text="${s.estado}"></span>
+            </td>
+            <td th:text="${s.fechaCreacion}"></td>
+            <td>
+              <form method="post" th:action="@{/administracion/solicitudes/aprobar}" th:if="${s.estado == 'PENDIENTE'}" style="display:inline">
+                <input type="hidden" name="solicitud" th:value="${s.id}">
+                <button type="submit">Aprobar →</button>
+              </form>
+              <form method="post" th:action="@{/administracion/solicitudes/rechazar}" th:if="${s.estado == 'PENDIENTE'}" style="display:inline">
+                <input type="hidden" name="solicitud" th:value="${s.id}">
+                <button type="submit" class="danger">Rechazar</button>
+              </form>
+              <span class="os-note" th:if="${s.estado != 'PENDIENTE'}" th:text="${s.estado}"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="os-note" style="margin-top:.6rem">Aprobar crea la cuenta con una contraseña temporal (mostrada una sola vez) y enrolla el rol solicitado. El Cadete/Tech Lead cambia su clave en Mi perfil.</p>
+    </section>
+  </main>
+  <div id="os-terminal" class="os-terminal" role="status" aria-label="Barra de estado CHANGE">
+    <span class="os-dot"></span>
+    <span class="os-label">CHANGE·OS</span>
+    <span class="os-log"><b>ADM //</b> bandeja de clearance bajo control</span>
+    <span class="os-right">ÁMBITO · ACADEMIA</span>
+  </div>
+  <script th:src="@{/js/os-terminal.js}" defer></script>
+</body>
+</html>

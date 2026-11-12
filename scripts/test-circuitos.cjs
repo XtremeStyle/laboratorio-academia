@@ -1,0 +1,12 @@
+const assert = require('node:assert/strict');
+const { calcular } = require('../src/main/resources/static/js/circuitos.js');
+const safe = calcular(5, 220, 2, 20, 0.25, true);
+assert.ok(Math.abs(safe.corriente - 3 / 220) < 1e-12);
+assert.ok(Math.abs(safe.potencia - (3 / 220) ** 2 * 220) < 1e-12);
+assert.equal(safe.excesoLed, false);
+assert.equal(calcular(5, 220, 2, 20, 0.25, false).corriente, 0);
+assert.equal(calcular(1, 220, 2, 20, 0.25, true).corriente, 0);
+assert.equal(calcular(5, 10, 2, 20, 0.25, true).excesoLed, true);
+assert.equal(calcular(5, 10, 2, 20, 0.25, true).excesoResistencia, true);
+assert.equal(calcular(5, 0, 2, 20, 0.25, true), null);
+console.log('Simulador de circuitos: comprobaciones aprobadas.');

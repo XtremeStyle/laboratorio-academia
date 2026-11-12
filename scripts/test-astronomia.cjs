@@ -1,0 +1,20 @@
+const fs = require('fs');
+const vm = require('vm');
+const source = fs.readFileSync('src/main/resources/static/js/astronomia.js', 'utf8');
+const exported = source.replace("  update(); window.requestAnimationFrame(frame);", "  update(); window.requestAnimationFrame(frame);");
+const sandbox = { window: { matchMedia: () => ({matches:true}), requestAnimationFrame: () => {}, CHANGEAstronomy: null }, document: { getElementById: () => null, querySelectorAll: () => [] }, Number, Math };
+// Exercise the pure model through an isolated extraction to avoid requiring a browser DOM.
+const match = source.match(/function calculate\(mass, axis, eccentricity, planetMass\) \{[\s\S]*?\n  \}/);
+if (!match) throw new Error('No se encontró el modelo orbital');
+const calculate = new Function('clamp', `${match[0]}; return calculate;`)(Math.min);
+const earth = calculate(1, 1, 0.0167, 1);
+if (Math.abs(earth.period - 1) > 0.001) throw new Error(`Periodo Tierra inesperado: ${earth.period}`);
+if (!(earth.peri < 1 && earth.aphe > 1)) throw new Error('Perihelio y afelio no respetan la excentricidad');
+const circular = calculate(1, 1, 0, 1);
+if (Math.abs(circular.peri - circular.aphe) > 1e-9) throw new Error('Una órbita circular debe tener distancias iguales');
+const heavyStar = calculate(2, 1, 0, 1);
+if (!(heavyStar.period < circular.period)) throw new Error('Una estrella más masiva debe reducir el periodo');
+const farOrbit = calculate(1, 2, 0, 1);
+if (!(farOrbit.period > circular.period)) throw new Error('Una órbita más lejana debe aumentar el periodo');
+if (calculate(1, 1, 1, 1) !== null) throw new Error('Debe rechazarse una excentricidad parabólica o hiperbólica');
+console.log('OK: modelo orbital; Tierra, órbita circular, efecto de masa, distancia y validación física.');

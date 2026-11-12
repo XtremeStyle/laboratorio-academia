@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ruta de aprendizaje · CHANGE</title><link rel="stylesheet" th:href="@{/css/laboratorio.css}"><link rel="stylesheet" th:href="@{/css/change-brand.css}"><link rel="stylesheet" th:href="@{/css/cursos.css}"><meta name="_csrf" th:content="${_csrf.token}"><meta name="_csrf_header" th:content="${_csrf.headerName}"><script defer th:src="@{/js/disenos.js}"></script><script defer th:src="@{/js/evidencia-diseno.js}"></script>  <link rel="stylesheet" th:href="@{/css/space-lab.css}">
+</head>
+<body><a class="skip-link" href="#contenido">Saltar al contenido principal</a><main class="content-wrap academy-page" id="contenido">
+  <p class="eyebrow">CHANGE ACADEMY <span class="lab-dot"></span> <span th:text="${detalle.course.track}">SEMILLERO</span></p>
+  <a class="academy-back" th:href="@{/cursos}">← Volver al catálogo</a>
+  <h1 th:text="${detalle.course.title}">Curso</h1><p class="academy-lead" th:text="${detalle.course.description}">Descripción</p>
+  <p class="academy-notice" th:if="${detalle.course.state != 'ACTIVA'}">Este curso está en modo de consulta. Puedes revisar las lecciones y evidencias registradas.</p>
+  <section class="lesson-list">
+    <article class="lesson-panel" th:each="leccion : ${detalle.lessons}" th:id="|leccion-${leccion.id}|">
+      <div class="lesson-head"><span th:text="|LECCIÓN ${#numbers.formatInteger(leccion.number,2)} · ${leccion.minutes} MIN|">LECCIÓN</span><span class="lesson-state" th:text="${leccion.state}">NO_INICIADA</span></div>
+      <h2 th:text="${leccion.title}">Lección</h2><p class="lesson-objective" th:text="${leccion.objective}">Objetivo</p>
+      <p th:text="${leccion.content}">Contenido</p>
+      <p class="academy-notice" role="status" th:if="${mensajeLeccion != null and leccionActualizada == leccion.id.toString()}" th:text="${mensajeLeccion}"></p>
+      <p class="academy-error" role="alert" th:if="${errorLeccion != null and leccionConError == leccion.id.toString()}" th:text="${errorLeccion}"></p>
+      <a class="lesson-lab-link" th:if="${detalle.course.id.toString() == 'c0000000-0000-4000-8000-000000000001'}" th:href="@{/laboratorio/circuitos} + '#clase-' + ${leccion.number}">Estudiar esta clase en Robótica ↗</a>
+      <a class="lesson-lab-link" th:if="${detalle.course.id.toString() == 'c0000000-0000-4000-8000-000000000002'}" th:href="@{/laboratorio/astronomia} + '#clase-' + ${leccion.number}">Estudiar esta clase en Astronomía ↗</a><div class="lesson-activity"><b>Práctica</b><p th:text="${leccion.activity}">Actividad</p></div>
+      <form th:if="${detalle.course.state == 'ACTIVA'}" th:action="@{/cursos/leccion}" method="post" class="lesson-form">
+        <input type="hidden" name="matricula" th:value="${detalle.course.enrollment}"><input type="hidden" name="leccion" th:value="${leccion.id}">
+        <label th:for="|evidencia-${leccion.id}|">Evidencia de aprendizaje <span th:text="${leccion.evidence}">Evidencia</span></label>
+        <textarea th:id="|evidencia-${leccion.id}|" name="evidencia" rows="3" maxlength="5000" placeholder="Describe el procedimiento, resultados, mediciones y conclusiones..." th:text="${leccionConError == leccion.id.toString() ? evidenciaIngresada : leccion.submittedEvidence}"></textarea>
+        <div class="lesson-design" th:if="${detalle.course.id.toString() == 'c0000000-0000-4000-8000-000000000001' or detalle.course.id.toString() == 'c0000000-0000-4000-8000-000000000002'}"><button type="button" class="academy-secondary import-design" th:attr="data-type=${detalle.course.id.toString() == 'c0000000-0000-4000-8000-000000000001' ? 'CIRCUITO' : 'COHETE'}">Añadir diseño guardado a la evidencia</button><p class="import-design-status" role="status" aria-live="polite"></p></div>
+        <div class="lesson-actions"><button type="submit" name="estado" value="EN_CURSO" class="academy-secondary">Guardar avance</button><button type="submit" name="estado" value="COMPLETADA" class="academy-action">Marcar completada</button></div>
+      </form>
+      <div th:if="${detalle.course.state != 'ACTIVA' and leccion.submittedEvidence != null}"><strong>Evidencia registrada</strong><p th:text="${leccion.submittedEvidence}"></p></div>
+    </article>
+  </section>
+</main>  <div id="os-terminal" class="os-terminal" role="status" aria-label="Barra de estado CHANGE"><span class="os-dot"></span><span class="os-label">CHANGE·OS</span><span class="os-log"><b>NAV //</b> sesión autenticada</span><span class="os-right">SECURE · LOCAL</span></div>
+  <script th:src="@{/js/os-terminal.js}" defer></script>
+</body></html>

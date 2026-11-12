@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/laboratorio;MODE=PostgreSQL;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+  thymeleaf:
+    cache: false
+
+logging:
+  level:
+    org.hibernate.SQL: WARN
+    org.flywaydb: INFO
+
+server:
+  address: 127.0.0.1

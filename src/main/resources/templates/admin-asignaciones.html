@@ -1,0 +1,14 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Asignaciones · CHANGE</title><link rel="stylesheet" th:href="@{/css/laboratorio.css}"><link rel="stylesheet" th:href="@{/css/change-brand.css}">  <link rel="stylesheet" th:href="@{/css/space-lab.css}">
+</head>
+<body><a class="skip-link" href="#contenido">Saltar al contenido principal</a><main class="content-wrap" id="contenido"><p class="eyebrow">ADMINISTRACIÓN</p><h1>Asignaciones a semilleros</h1>
+<p><a class="text-link" th:href="@{/}">← Inicio</a> · <a class="text-link" th:href="@{/administracion/usuarios}">Usuarios</a> · <a class="text-link" th:href="@{/administracion/semilleros}">Semilleros</a> · <a class="text-link" th:href="@{/administracion/tripulaciones}">Tripulaciones</a></p>
+<p th:if="${param.guardado}">Asignación activada.</p><p th:if="${param.cerrado}">Asignación cerrada. El historial se conserva.</p><p role="alert" th:if="${error}" th:text="${error}"></p>
+<form class="panel demo-search" method="post" th:action="@{/administracion/asignaciones}">
+<label for="usuario">Usuario</label><select id="usuario" name="usuario" required><option value="">Selecciona</option><option th:each="u : ${vista.users}" th:value="${u.id}" th:text="${u.name}"></option></select>
+<label for="semillero">Semillero</label><select id="semillero" name="semillero" required><option value="">Selecciona</option><option th:each="s : ${vista.tracks}" th:value="${s.id}" th:text="${s.name}"></option></select>
+<button class="button button-primary" type="submit">Asignar o reactivar</button></form>
+<section class="panel"><h2>Asignaciones activas</h2><p th:if="${#lists.isEmpty(vista.active)}">No hay asignaciones activas.</p>
+<div th:each="a : ${vista.active}" class="assignment-row"><span th:text="${a.email + ' · ' + a.track}"></span><form method="post" th:action="@{/administracion/asignaciones/cerrar}"><input type="hidden" name="asignacion" th:value="${a.id}"><button type="submit">Cerrar asignación</button></form></div></section>
+</main>  <div id="os-terminal" class="os-terminal" role="status" aria-label="Barra de estado CHANGE"><span class="os-dot"></span><span class="os-label">CHANGE·OS</span><span class="os-log"><b>NAV //</b> sesión autenticada</span><span class="os-right">SECURE · LOCAL</span></div>
+  <script th:src="@{/js/os-terminal.js}" defer></script>
+</body></html>

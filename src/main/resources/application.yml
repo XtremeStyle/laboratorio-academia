@@ -1,0 +1,38 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 11MB
+  application:
+    name: CHANGE
+  profiles:
+    default: dev
+  thymeleaf:
+    cache: true
+
+server:
+  port: ${PORT:8080}
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+  info:
+    env:
+      enabled: false
+
+info:
+  app:
+    name: CHANGE
+    description: Plataforma académica CHANGE — Change the way you learn.
+    version: 0.1.0-SNAPSHOT
+
+logging:
+  level:
+    root: INFO
+    com.laboratorio: INFO

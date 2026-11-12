@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#04070f">
+  <meta name="description" content="Accede a CHANGE // SPACE-LAB OS, tu universo de aprendizaje aeroespacial.">
+  <title>Acceso · CHANGE // SPACE-LAB OS</title>
+  <link rel="stylesheet" th:href="@{/css/laboratorio.css}">
+  <link rel="stylesheet" th:href="@{/css/space-lab.css}">
+  <link rel="icon" th:href="@{/assets/brand/change-orbit.svg}" type="image/svg+xml">
+</head>
+<body class="os-auth-body"><a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+  <main class="os-auth-grid" id="contenido">
+    <aside class="os-hero" aria-hidden="true">
+      <div class="os-hero-top">
+        <span class="os-chip chip-cyan">ZUMBIDO · 60Hz</span>
+        <span class="os-chip">ORBITAL · ESTABLE</span>
+      </div>
+      <div class="os-orbit">
+        <div class="os-ring os-ring-1"></div>
+        <div class="os-ring os-ring-2"></div>
+        <div class="os-ring os-ring-3"></div>
+        <div class="os-core"><img th:src="@{/assets/brand/change-orbit.svg}" alt="Emblema orbital de CHANGE"></div>
+        <div class="os-satellite"></div>
+      </div>
+      <div class="os-hero-bottom">
+        <p class="os-hero-kicker">CHANGE // SPACE-LAB OS</p>
+        <h1 class="os-hero-title">Aprende como<br><span>una misión</span><br>espacial.</h1>
+        <p class="os-hero-sub">Robótica y Astronomía en ocho etapas secuenciales: de los circuitos a las órbitas, de la bitácora al boletín.</p>
+      </div>
+    </aside>
+    <section class="auth-card os-auth-card" aria-labelledby="login-title">
+      <p class="auth-eyebrow">ACCESO AL CONTROL DE MISIÓN</p>
+      <h2 id="login-title" class="os-h2">Identifícate<br><span>para continuar.</span></h2>
+      <div class="os-alert os-alert-error" th:if="${param.error}" role="alert"><b>Acceso denegado.</b> Revisa tu correo y contraseña.</div>
+      <div class="os-alert os-alert-ok" th:if="${param.logout}" role="status">Sesión cerrada correctamente.</div>
+      <div class="os-alert os-alert-ok" th:if="${param.contrasenaCambiada}" role="status">Contraseña actualizada. Inicia sesión nuevamente.</div>
+      <form class="auth-form" method="post" th:action="@{/login}">
+        <label for="username">Correo de Cadete / Tech Lead</label>
+        <input id="username" name="username" type="email" autocomplete="username" placeholder="nombre@ejemplo.com" required autofocus>
+        <label for="password">Contraseña</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Tu contraseña" required>
+        <button class="auth-submit" type="submit">Iniciar sesión en CHANGE <span aria-hidden="true">→</span></button>
+      </form>
+      <div class="os-auth-divider"><span>o</span></div>
+      <a class="os-link-secondary" th:href="@{/registro}">¿Aún no tienes acceso? <b>Solicitar cuenta →</b></a>
+      <a class="auth-back" th:href="@{/}">← Volver al despegue</a>
+      <p class="os-footnote">Acceso restringido · Academia de demostración CHANGE · TLS + BCrypt</p>
+    </section>
+  </main>
+  <div id="os-terminal" class="os-terminal" role="status" aria-label="Barra de estado CHANGE">
+    <span class="os-dot"></span>
+    <span class="os-label">CHANGE·OS</span>
+    <span class="os-log"><b>NAV //</b> acceso seguro</span>
+    <span class="os-right">ENCRIPTADO · BCrypt</span>
+  </div>
+  <script th:src="@{/js/os-terminal.js}" defer></script>
+</body>
+</html>

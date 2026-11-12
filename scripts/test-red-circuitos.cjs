@@ -1,0 +1,15 @@
+const assert = require('node:assert/strict');
+const {solve} = require('../src/main/resources/static/js/taller-circuitos.js');
+let series = solve(5,[{a:1,b:2,r:220},{a:2,b:0,r:330}]);
+assert.ok(Math.abs(series.sourceCurrent - 5/550)<1e-10);
+assert.ok(Math.abs(series.parts[0].current-series.parts[1].current)<1e-10);
+let parallel = solve(5,[{a:1,b:0,r:220},{a:1,b:0,r:330}]);
+assert.ok(Math.abs(parallel.sourceCurrent-(5/220+5/330))<1e-10);
+assert.equal(solve(5,[{a:1,b:2,r:220}]).sourceCurrent,0);
+assert.equal(solve(5,[{a:1,b:2,r:220}]).connected,false);
+assert.equal(solve(0,[{a:1,b:0,r:220}]).connected,true);
+assert.equal(solve(0,[{a:1,b:0,r:220}]).sourceCurrent,0);
+assert.equal(solve(5,[{a:2,b:3,r:220}]).parts[0].floating,true);
+assert.equal(solve(5,[{a:1,b:1,r:220}]),null);
+assert.equal(solve(5,[{a:1,b:0,r:0}]),null);
+console.log('Redes resistivas: serie, paralelo, circuito abierto y validación aprobados.');

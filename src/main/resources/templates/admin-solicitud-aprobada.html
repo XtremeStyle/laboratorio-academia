@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#04070f">
+  <title>Acceso otorgado · CHANGE // SPACE-LAB OS</title>
+  <link rel="stylesheet" th:href="@{/css/laboratorio.css}">
+  <link rel="stylesheet" th:href="@{/css/space-lab.css}">
+  <link rel="icon" th:href="@{/assets/brand/change-orbit.svg}" type="image/svg+xml">
+</head>
+<body><a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+  <main class="content-wrap" id="contenido">
+    <p class="eyebrow">ADMINISTRACIÓN · CLEARANCE</p>
+    <h1>Acceso<br><span style="color:var(--cyan-bright)">otorgado.</span></h1>
+    <p><a class="text-link" th:href="@{/administracion/solicitudes}">← Volver a la bandeja</a></p>
+
+    <section class="panel" style="margin-top:1.5rem">
+      <h2 style="margin-top:0">Credenciales temporales para <span th:text="${aprobada.nombreCompleto()}"></span></h2>
+      <p class="os-note">Rol asignado: <b th:text="${aprobada.rol}"></b> · Correo: <b th:text="${aprobada.correo}"></b></p>
+      <p class="os-note">Contraseña temporal (se muestra una sola vez):</p>
+      <div class="os-temp-pass" th:text="${aprobada.contrasenaTemporal}" aria-label="Contraseña temporal"></div>
+      <p class="os-note">Entrega estas credenciales por un canal privado. El usuario debe cambiar la contraseña en su primer ingreso desde <b>Mi perfil</b>. Si el mensaje se cierra, la contraseña ya no puede recuperarse: desactiva la cuenta y apruébala de nuevo si es necesario.</p>
+      <p><a class="button" th:href="@{/administracion/solicitudes}">Volver a la bandeja</a></p>
+    </section>
+  </main>
+  <div id="os-terminal" class="os-terminal" role="status" aria-label="Barra de estado CHANGE">
+    <span class="os-dot"></span>
+    <span class="os-label">CHANGE·OS</span>
+    <span class="os-log"><b>ADM //</b> clearance completado</span>
+    <span class="os-right">MOSTRADO UNA VEZ</span>
+  </div>
+  <script th:src="@{/js/os-terminal.js}" defer></script>
+</body>
+</html>

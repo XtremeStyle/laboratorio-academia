@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:laboratorio_test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  thymeleaf:
+    cache: false
+
+logging:
+  level:
+    root: WARN
+    com.laboratorio: INFO
+
+laboratorio:
+  attachments:
+    directory: target/test-adjuntos

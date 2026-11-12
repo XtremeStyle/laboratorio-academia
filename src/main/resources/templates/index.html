@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#04070f">
+  <meta name="description" content="CHANGE // SPACE-LAB OS — aprende robótica y astronomía como una misión espacial: ocho etapas, laboratorios, Misiones y evaluación.">
+  <title>CHANGE // SPACE-LAB OS</title>
+  <link rel="stylesheet" th:href="@{/css/laboratorio.css}">
+  <link rel="stylesheet" th:href="@{/css/space-lab.css}">
+  <link rel="icon" th:href="@{/assets/brand/change-orbit.svg}" type="image/svg+xml">
+  <script defer th:src="@{/js/laboratorio.js}"></script>
+</head>
+<body><a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+<div th:unless="${sesionIniciada}" class="os-land">
+  <header class="os-land-header">
+    <a class="os-land-brand" th:href="@{/}" aria-label="CHANGE, inicio"><img th:src="@{/assets/brand/change-orbit.svg}" alt=""><strong>CHANGE</strong><span class="os-chip chip-cyan">SPACE-LAB OS</span></a>
+    <nav class="os-land-nav" aria-label="Navegación principal">
+      <a href="#laboratorios">Laboratorios</a>
+      <a href="#camino">Camino</a>
+      <a th:href="@{/registro}">Solicitar acceso</a>
+      <a class="os-land-cta" th:href="@{/login}">Iniciar sesión <span aria-hidden="true">→</span></a>
+    </nav>
+  </header>
+
+  <main id="contenido">
+    <section class="os-land-hero">
+      <div class="os-land-copy">
+        <p class="eyebrow">SISTEMA OPERATIVO DE APRENDIZAJE · ACADEMIA DEMOSTRACIÓN</p>
+        <h1 class="os-land-title">CHANGE<br><span>THE WAY</span><br>YOU LEARN.</h1>
+        <p class="os-land-sub">Ocho etapas secuenciales de Robótica y Astronomía con laboratorios interactivos, Misiones con entregas y criterios verificables, evaluación y XP. Nada de esto es teoría abstracta: aquí se construye.</p>
+        <div class="os-land-actions">
+          <a class="button button-primary" th:href="@{/registro}">Solicitar clearance <span aria-hidden="true">→</span></a>
+          <a class="button" th:href="@{/login}">Ya tengo cuenta</a>
+        </div>
+        <p class="os-footnote" style="text-align:left">localhost · entorno local · sin datos reales · TLS en producción</p>
+      </div>
+      <div class="os-orbit os-orbit-hero" aria-hidden="true">
+        <div class="os-ring os-ring-1"></div>
+        <div class="os-ring os-ring-2"></div>
+        <div class="os-ring os-ring-3"></div>
+        <div class="os-core"><img th:src="@{/assets/brand/change-orbit.svg}" alt=""></div>
+        <div class="os-satellite"></div>
+      </div>
+    </section>
+
+    <section class="os-land-section" id="laboratorios">
+      <div class="os-land-section-head"><p class="eyebrow">DOS RUTAS · OCHO CLASES CADA UNA</p><h2>Los laboratorios</h2></div>
+      <div class="os-land-grid">
+        <article class="os-land-card"><p class="os-land-card-num">01 / LABORATORIO A</p><div class="os-land-icon">⌁</div><h3>Robótica &amp; Electrónica</h3><p>Circuitos, redes resistivas, sensores, lógica y automatización. Del LED al robot de línea en ocho etapas.</p><a th:href="@{/laboratorio/circuitos}">Entrar al laboratorio <span>→</span></a></article>
+        <article class="os-land-card"><p class="os-land-card-num">02 / LABORATORIO B</p><div class="os-land-icon">◉</div><h3>Astronomía &amp; Cohetería</h3><p>Física orbital, trayectorias, diseño de cohetes no propulsados y comunicación por luz. Del cielo a la bitácora.</p><a th:href="@{/laboratorio/astronomia}">Entrar al laboratorio <span>→</span></a></article>
+      </div>
+    </section>
+
+    <section class="os-land-section" id="camino">
+      <div class="os-land-section-head"><p class="eyebrow">MISIÓN, NO CURSO</p><h2>El camino CHANGE</h2></div>
+      <div class="os-steps">
+        <article class="os-step"><span class="os-step-num">01</span><h3>Explora</h3><p>Las 8 clases de tu ruta, con práctica y bitácora.</p></article>
+        <article class="os-step"><span class="os-step-num">02</span><h3>Experimenta</h3><p>Simuladores: redes DC, sensores, órbitas y cohetes de papel.</p></article>
+        <article class="os-step"><span class="os-step-num">03</span><h3>Crea</h3><p>Misiones con entregas versionadas, criterios y XP.</p></article>
+        <article class="os-step"><span class="os-step-num">04</span><h3>Recibe</h3><p>Evaluación, competencias y boletín PDF al cerrar.</p></article>
+      </div>
+    </section>
+  </main>
+  <footer class="os-land-footer"><span>CHANGE · Change the way you learn.</span><a th:href="@{/login}">Entrar <span>→</span></a></footer>
+</div>
+
+<div class="app-shell" th:if="${sesionIniciada}">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" th:href="@{/}" aria-label="CHANGE, inicio">
+      <img class="brand-symbol-image" th:src="@{/assets/brand/change-orbit.svg}" src="/assets/brand/change-orbit.svg" alt="">
+      <span class="brand-copy"><strong>CHANGE</strong><small>SPACE-LAB OS</small></span>
+    </a>
+    <div class="workspace-label">CONTROL DE MISIÓN</div>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a class="nav-link active" href="#inicio"><span class="nav-icon">⌂</span> Inicio</a>
+      <a class="nav-link" th:href="@{/mis-misiones}"><span class="nav-icon">✳</span> Mis Misiones</a>
+      <a class="nav-link" th:href="@{/cursos}"><span class="nav-icon">◈</span> Cursos</a>
+      <a class="nav-link" th:href="@{/mi-perfil}"><span class="nav-icon">○</span> Mi perfil</a>
+      <a class="nav-link" th:href="@{/laboratorio/circuitos}"><span class="nav-icon">⌁</span> Laboratorio de Robótica</a>
+      <a class="nav-link" th:href="@{/laboratorio/astronomia}"><span class="nav-icon">◉</span> Laboratorio de Astronomía</a>
+      <a class="nav-link" th:href="@{/chat}"><span class="nav-icon">◌</span> Chat</a>
+      <a class="nav-link" th:href="@{/mi-boletin.pdf}"><span class="nav-icon">▤</span> Mi boletín PDF</a>
+      <a class="nav-link" th:href="@{/mi-progreso}"><span class="nav-icon">↗</span> Mi progreso</a>
+      <a class="nav-link" th:href="@{/clasificacion}"><span class="nav-icon">◇</span> Clasificación</a>
+      <a class="nav-link" th:href="@{/notificaciones}"><span class="nav-icon">◉</span> Notificaciones</a>
+      <a class="nav-link" th:if="${esDocente}" th:href="@{/academia/misiones}"><span class="nav-icon">✎</span> Gestión de Misiones</a>
+      <a class="nav-link" th:if="${esAdministrador}" th:href="@{/administracion/semilleros}"><span class="nav-icon">⚙</span> Administración</a>
+      <a class="nav-link" th:if="${esAdministrador}" th:href="@{/administracion/solicitudes}"><span class="nav-icon">➤</span> Solicitudes</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-note"><span class="note-orb">✦</span><div><strong>Aprender haciendo.</strong><small>Explora. Experimenta. Construye.</small></div></div>
+    </div>
+  </aside>
+
+  <main class="main-area" id="inicio">
+    <header class="topbar">
+      <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menú">☰</button>
+      <div class="breadcrumb">CHANGE <span>/</span> <strong>Inicio</strong></div>
+      <div class="top-actions">
+        <span class="date-label" id="todayLabel">CONTROL DE MISIÓN</span>
+      </div>
+    </header>
+
+    <div class="content-wrap">
+      <section class="panel os-command-panel" th:if="${sesionIniciada}">
+        <p class="eyebrow">TU ESPACIO DE APRENDIZAJE</p><h1>Hola, <span th:text="${panel.name}"></span>.</h1>
+        <div class="os-metrics">
+          <div class="os-metric"><span class="os-metric-k">MISIONES ACTIVAS</span><span class="os-metric-v" th:text="${panel.missions}"></span></div>
+          <div class="os-metric"><span class="os-metric-k">ETAPAS ENTREGADAS</span><span class="os-metric-v" th:text="${panel.deliveries}"></span></div>
+          <div class="os-metric"><span class="os-metric-k">SIN LEER</span><span class="os-metric-v" th:text="${panel.unread}"></span></div>
+          <div class="os-metric"><span class="os-metric-k">XP · RANGO</span><span class="os-metric-v os-accent"><span th:text="${experiencia.xp}"></span> XP · <span th:text="${experiencia.rank}"></span></span></div>
+        </div>
+        <h2>Mis insignias</h2><p th:if="${#lists.isEmpty(insignias)}">Aún no tienes insignias. Entrega tu primera Misión evaluada.</p><ul class="os-badges"><li th:each="i : ${insignias}"><strong th:text="${i.name}"></strong> · <span th:text="${i.description}"></span></li></ul>
+        <h2>Mis semilleros</h2><p th:if="${#lists.isEmpty(panel.tracks)}">Aún no tienes semilleros asignados. Pide al administrador que te asigne uno.</p><ul><li th:each="s : ${panel.tracks}" th:text="${s}"></li></ul>
+        <p><a class="text-link" th:href="@{/mis-misiones}">Mis Misiones →</a> · <a class="text-link" th:href="@{/notificaciones}">Notificaciones →</a> · <a class="text-link" th:href="@{/clasificacion}">Clasificación →</a></p>
+        <form method="post" th:action="@{/logout}"><button class="button" type="submit">Cerrar sesión</button></form>
+      </section>
+      <footer class="page-footer"><span><b>CHANGE</b> <i>·</i> Space-Lab OS</span><span>EXPLORA · CREA · EVOLUCIONA</span></footer>
+    </div>
+  </main>
+</div>
+<div class="mobile-scrim" id="mobileScrim"></div>
+<div id="os-terminal" class="os-terminal" role="status" aria-label="Barra de estado CHANGE"><span class="os-dot"></span><span class="os-label">CHANGE·OS</span><span class="os-log"><b>NAV //</b> control de misión</span><span class="os-right">SECURE · LOCAL</span></div>
+<script th:src="@{/js/os-terminal.js}" defer></script>
+</body>
+</html>
